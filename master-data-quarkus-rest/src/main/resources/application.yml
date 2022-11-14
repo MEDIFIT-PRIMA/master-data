@@ -1,0 +1,49 @@
+s3:
+  bucket: openepcis
+  json-schema-key-prefix: "json-schema/"
+  xsd-schema-key-prefix: "xsd-schema/"
+  document-key-prefix-date-format: "'capture-document/'yyyy/MM/dd/"
+
+quarkus:
+  security:
+    auth:
+      enabled-in-dev-mode: false
+
+  arc:
+    unremovable-types: io.quarkus.security.spi.runtime.SecurityCheckStorage
+
+  log:
+    level: INFO
+    category:
+      "org.elasticsearch.client.RestClient":
+        level: ERROR
+  swagger-ui:
+    always-include: true
+    oauth2-redirect-url: "/q/swagger-ui/oauth2-redirect.html"
+    theme: original
+  elasticsearch:
+    hosts: localhost:9200
+  s3:
+    endpoint-override: "${S3_ENDPOINT_OVERRIDE:http://localhost:9100}"
+    aws:
+      region: "us-east-1"
+      path-style-access-enabled: true
+      credentials:
+        type: static
+        static-provider:
+          access-key-id: "root"
+          secret-access-key: "openepcis"
+    sync-client:
+      type: apache
+
+# joda-time has no jandex index - let's create it
+  index-dependency:
+    joda-time:
+      group-id: joda-time
+      artifact-id: joda-time
+#    jakarta-xml-bind:
+#      group-id: jakarta.xml.bind
+#      artifact-id: jakarta.xml.bind-api
+
+  class-loading:
+    parent-first-artifacts: jakarta.xml.bind:jakarta.xml.bind-api,org.eclipse.persistence:org.eclipse.persistence.moxy

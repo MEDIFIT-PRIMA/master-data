@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <parent>
+     <groupId>net.medifit-prima</groupId>
+     <artifactId>master-data-parent</artifactId>
+     <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>master-data-elasticsearch</artifactId>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <openepcis.core.version>1.0.0-SNAPSHOT</openepcis.core.version>
+    </properties>
+
+
+    <repositories>
+        <repository>
+            <id>sonatype-staging</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-elasticsearch-rest-high-level-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.everit-org.json-schema</groupId>
+            <artifactId>org.everit.json.schema</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.openepcis</groupId>
+            <artifactId>openepcis-model-core</artifactId>
+            <version>${openepcis.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.openepcis</groupId>
+            <artifactId>openepcis-s3</artifactId>
+            <version>${openepcis.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.medifit-prima</groupId>
+            <artifactId>master-data-core</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkiverse.quarkus-elasticsearch-reactive</groupId>
+            <artifactId>quarkus-elasticsearch-reactive</artifactId>
+            <version>0.2.0</version>
+        </dependency>
+
+    </dependencies>
+</project>

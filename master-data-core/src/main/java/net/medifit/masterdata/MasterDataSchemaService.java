@@ -3,10 +3,9 @@ package net.medifit.masterdata;
 import com.fasterxml.jackson.core.TreeNode;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
-import net.medifit.masterdata.schema.MasterDataSchema;
-
 import java.io.InputStream;
 import java.net.URL;
+import net.medifit.masterdata.schema.MasterDataSchema;
 
 public interface MasterDataSchemaService {
 
@@ -23,10 +22,7 @@ public interface MasterDataSchemaService {
 
   Multi<MasterDataSchema> list();
 
-  Uni<String> storeJsonData(
-          String group, String type, InputStream schemaStream);
+  Uni<String> storeJsonData(String group, String type, InputStream schemaStream);
 
-  Uni<TreeNode> getJsonData(
-          String group, String type, String id);
-
+  Uni<TreeNode> getJsonData(String group, String type, String id);
 }

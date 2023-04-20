@@ -11,7 +11,7 @@
      <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>master-data-elasticsearch</artifactId>
+    <artifactId>master-data-service</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -37,18 +37,6 @@
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-arc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-elasticsearch-rest-high-level-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-joda</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -79,12 +67,10 @@
             <artifactId>master-data-core</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-
         <dependency>
-            <groupId>io.quarkiverse.quarkus-elasticsearch-reactive</groupId>
-            <artifactId>quarkus-elasticsearch-reactive</artifactId>
-            <version>0.2.0</version>
+            <groupId>io.quarkiverse.opensearch</groupId>
+            <artifactId>quarkus-opensearch-java-client</artifactId>
+            <version>0.2.4</version>
         </dependency>
-
     </dependencies>
 </project>

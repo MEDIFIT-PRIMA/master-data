@@ -1,6 +1,3 @@
 package net.medifit.masterdata;
 
-public interface MasterDataService {
-
-
-}
+public interface MasterDataService {}

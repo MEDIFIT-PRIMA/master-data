@@ -1,10 +1,8 @@
 package net.medifit.masterdata;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.openepcis.model.core.exception.PersistenceException;
-import io.openepcis.model.core.exception.ResourceNotFoundException;
 import io.openepcis.s3.AmazonS3Service;
 import io.openepcis.s3.UploadMetadata;
 import io.smallrye.mutiny.Multi;
@@ -14,32 +12,26 @@ import java.io.InputStream;
 import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneOffset;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 import javax.enterprise.context.ApplicationScoped;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.medifit.masterdata.elasticsearch.ElasticsearchReactiveRepository;
 import net.medifit.masterdata.schema.JsonSchemaLoader;
 import net.medifit.masterdata.schema.MasterDataSchema;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.context.ManagedExecutor;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.everit.json.schema.Schema;
+import org.opensearch.client.opensearch._types.FieldValue;
+import org.opensearch.client.opensearch._types.query_dsl.QueryBuilders;
+import org.opensearch.client.opensearch.core.SearchRequest;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 @Slf4j
 public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
 
-  private final ElasticsearchReactiveRepository elasticsearchReactiveRepository;
+  private final Repository repository;
 
   private final ObjectMapper objectMapper;
 
@@ -48,59 +40,48 @@ public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
   private final ManagedExecutor managedExecutor;
 
   @ConfigProperty(
-      name = "app.elasticsearch.index.master-data-schema.name",
+      name = "app.opensearch.index.master-data-schema.name",
       defaultValue = "master-data-schema")
-    @Getter
-    String schemaIndexName = "master-data-schema";
+  @Getter
+  String schemaIndexName = "master-data-schema";
 
-    @ConfigProperty(
-            name = "app.elasticsearch.index.master-data-schema.name",
-            defaultValue = "master-data-schema")
-    @Getter
-    String s3KeyPrefix = "master-data-schema";
+  @ConfigProperty(
+      name = "app.opensearch.index.master-data-schema.name",
+      defaultValue = "master-data-schema")
+  @Getter
+  String s3KeyPrefix = "master-data-schema";
 
   @Override
   public Uni<MasterDataSchema> getById(String id) {
-    return elasticsearchReactiveRepository
-        .query(QueryBuilders.idsQuery().addIds(id), schemaIndexName)
-        .onItem()
-        .transform(
-            i -> {
-              final Optional<SearchHit> hit = Arrays.stream(i).findFirst();
-              if (hit.isPresent()) {
-                try {
-                  return objectMapper.readValue(
-                      hit.get().getSourceAsString(), MasterDataSchema.class);
-                } catch (JsonProcessingException e) {
-                  throw new RuntimeException(e);
-                }
-              }
-              throw new ResourceNotFoundException("MasterDataSchema for id {}");
-            });
+    return repository
+        .search(
+            schemaIndexName,
+            MasterDataSchema.class,
+            QueryBuilders.ids().values(id).build()._toQuery())
+        .toUni();
   }
 
   @Override
   public Uni<MasterDataSchema> getByGroupType(String group, String type) {
-    return elasticsearchReactiveRepository
-        .query(
-            QueryBuilders.boolQuery()
-                .must(QueryBuilders.termQuery("group.keyword", group))
-                .must(QueryBuilders.termQuery("type.keyword", type)),
-            schemaIndexName)
-        .onItem()
-        .transform(
-            i -> {
-              final Optional<SearchHit> hit = Arrays.stream(i).findFirst();
-              if (hit.isPresent()) {
-                try {
-                  return objectMapper.readValue(
-                      hit.get().getSourceAsString(), MasterDataSchema.class);
-                } catch (JsonProcessingException e) {
-                  throw new RuntimeException(e);
-                }
-              }
-              throw new ResourceNotFoundException("MasterDataSchema for id {}");
-            });
+    return repository
+        .search(
+            schemaIndexName,
+            MasterDataSchema.class,
+            QueryBuilders.bool()
+                .must(
+                    QueryBuilders.term()
+                        .field("group.keyword")
+                        .value(FieldValue.of(group))
+                        .build()
+                        ._toQuery(),
+                    QueryBuilders.term()
+                        .field("type.keyword")
+                        .value(FieldValue.of(type))
+                        .build()
+                        ._toQuery())
+                .build()
+                ._toQuery())
+        .toUni();
   }
 
   @Override
@@ -131,13 +112,12 @@ public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
                       .defaultPrefix(defaultPrefix)
                       .createdAt(Instant.now().atOffset(ZoneOffset.UTC))
                       .build();
-              final Map<String, ?> map = objectMapper.convertValue(schema, Map.class);
-              return elasticsearchReactiveRepository
-                  .index(map, schemaIndexName, id)
+              return repository
+                  .index(schemaIndexName, id, schema)
                   .onItem()
                   .transform(
                       r -> {
-                        log.info(r.status().toString());
+                        log.info(r.result().toString());
                         return schema;
                       });
             });
@@ -170,13 +150,12 @@ public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
                         .defaultPrefix(defaultPrefix)
                         .createdAt(Instant.now().atOffset(ZoneOffset.UTC))
                         .build();
-                final Map<String, ?> map = objectMapper.convertValue(schema, Map.class);
-                return elasticsearchReactiveRepository
-                    .index(map, schemaIndexName, id)
+                return repository
+                    .index(schemaIndexName, id, schema)
                     .onItem()
                     .transform(
                         r -> {
-                          log.info(r.status().toString());
+                          log.info(r.result().toString());
                           return schema;
                         });
               });
@@ -196,57 +175,27 @@ public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
             })
         .chain(
             uuid -> {
-              return elasticsearchReactiveRepository
-                  .delete(schemaIndexName, uuid)
-                  .onItem()
-                  .transform(i -> Boolean.TRUE);
+              return repository.delete(schemaIndexName, uuid).onItem().transform(i -> Boolean.TRUE);
             })
         .replaceIfNullWith(Boolean.FALSE);
   }
 
   @Override
   public Multi<MasterDataSchema> list() {
-    final SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-    return Multi.createFrom()
-        .emitter(
-            em -> {
-              searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-              searchSourceBuilder.size(1000);
-              elasticsearchReactiveRepository
-                  .query(schemaIndexName, searchSourceBuilder)
-                  .runSubscriptionOn(managedExecutor)
-                  .subscribe()
-                  .with(
-                      hits -> {
-                        try {
-                          Stream.of(hits)
-                              .forEach(
-                                  hit -> {
-                                    try {
-                                      em.emit(
-                                          objectMapper.readValue(
-                                              hit.getSourceAsString(), MasterDataSchema.class));
-                                    } catch (IOException e) {
-                                      throw new PersistenceException(e.getMessage(), e);
-                                    }
-                                  });
-                        } finally {
-                          em.complete();
-                        }
-                      },
-                      throwable -> {
-                        em.fail(throwable);
-                      });
-            });
+    final SearchRequest.Builder searchRequestBuilder = new SearchRequest.Builder();
+    searchRequestBuilder.query(QueryBuilders.matchAll().build()._toQuery());
+    searchRequestBuilder.size(1000);
+    searchRequestBuilder.index(schemaIndexName);
+    return repository.search(MasterDataSchema.class, searchRequestBuilder.build());
   }
 
-    @Override
-    public Uni<String> storeJsonData(String group, String type, InputStream schemaStream) {
-        return null;
-    }
+  @Override
+  public Uni<String> storeJsonData(String group, String type, InputStream schemaStream) {
+    return null;
+  }
 
-    @Override
-    public Uni<TreeNode> getJsonData(String group, String type, String id) {
-        return null;
-    }
+  @Override
+  public Uni<TreeNode> getJsonData(String group, String type, String id) {
+    return null;
+  }
 }

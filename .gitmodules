@@ -1,0 +1,3 @@
+[submodule "modules/openepcis-s3"]
+	path = modules/openepcis-s3
+	url = https://github.com/openepcis/openepcis-s3.git

@@ -33,13 +33,6 @@
             <artifactId>master-data-rest-api</artifactId>
             <scope>compile</scope>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>io.openepcis</groupId>
-            <artifactId>quarkus-auth-keycloak</artifactId>
-            <version>${openepcis.core.version}</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-core</artifactId>

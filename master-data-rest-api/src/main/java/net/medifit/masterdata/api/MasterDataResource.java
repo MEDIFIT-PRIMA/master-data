@@ -112,11 +112,26 @@ public class MasterDataResource {
                   .onItem()
                   .transform(
                       s -> {
-                        final org.everit.json.schema.Schema schema =
-                            JsonSchemaLoader.loadSchema(
-                                amazonS3Service.get(s.getJsonSchemaS3Key()));
-                        schema.validate(new JSONObject(amazonS3Service.get(u.getKey())));
-                        return u.getKey();
+                        final InputStream schemaInputStream =
+                            amazonS3Service.get(s.getJsonSchemaS3Key());
+                        final InputStream documentInputStream = amazonS3Service.get(u.getKey());
+                        try {
+                          final org.everit.json.schema.Schema schema =
+                              JsonSchemaLoader.loadSchema(schemaInputStream);
+                          schema.validate(new JSONObject(documentInputStream));
+                          return u.getKey();
+                        } finally {
+                          try {
+                            schemaInputStream.close();
+                          } catch (Exception ig) {
+                            // ignore
+                          }
+                          try {
+                            documentInputStream.close();
+                          } catch (Exception ig) {
+                            // ignore
+                          }
+                        }
                       });
             })
         .onItem()

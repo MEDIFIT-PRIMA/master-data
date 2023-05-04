@@ -1,8 +1,8 @@
 package net.medifit.masterdata.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.openepcis.model.core.exception.PersistenceException;
-import io.openepcis.model.core.exception.ResourceNotFoundException;
+import io.openepcis.core.exception.ImplementationException;
+import io.openepcis.core.exception.ResourceNotFoundException;
 import io.openepcis.model.rest.ProblemResponseBody;
 import io.openepcis.s3.AmazonS3Service;
 import io.quarkus.runtime.Startup;
@@ -236,7 +236,7 @@ public class MasterDataSchemaResource {
                 return RestResponse.ok(
                     objectMapper.readTree(amazonS3Service.get(s.getJsonSchemaS3Key())));
               } catch (IOException e) {
-                throw new PersistenceException(e.getMessage(), e);
+                throw new ImplementationException(e.getMessage(), e);
               }
             });
   }

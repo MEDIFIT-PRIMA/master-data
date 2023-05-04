@@ -2,7 +2,6 @@ package net.medifit.masterdata;
 
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.openepcis.model.core.exception.PersistenceException;
 import io.openepcis.s3.AmazonS3Service;
 import io.openepcis.s3.UploadMetadata;
 import io.smallrye.mutiny.Multi;
@@ -160,7 +159,7 @@ public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
                         });
               });
     } catch (IOException e) {
-      throw new PersistenceException(e.getMessage(), e);
+      return Uni.createFrom().failure(e);
     }
   }
 

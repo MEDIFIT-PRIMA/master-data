@@ -10,9 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.UUID;
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.medifit.masterdata.MasterDataSchemaService;
@@ -213,7 +214,7 @@ public class MasterDataResource {
                           final JSONObject json = new JSONObject(data);
                           schema.validate(json);
                         } catch (ValidationException ve) {
-                          throw new javax.validation.ValidationException(
+                          throw new jakarta.validation.ValidationException(
                               String.join("\n", ve.getAllMessages()), ve);
                         } catch (IOException ioe) {
                           throw new RuntimeException(ioe.getMessage(), ioe);

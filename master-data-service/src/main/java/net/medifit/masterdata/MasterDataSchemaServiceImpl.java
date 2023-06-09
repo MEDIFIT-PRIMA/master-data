@@ -12,7 +12,8 @@ import java.net.URL;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.UUID;
-import javax.enterprise.context.ApplicationScoped;
+
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

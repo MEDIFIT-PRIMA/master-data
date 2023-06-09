@@ -3,7 +3,8 @@ package net.medifit.masterdata.opensearch;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import java.util.concurrent.CompletableFuture;
-import javax.enterprise.context.ApplicationScoped;
+
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import net.medifit.masterdata.Repository;
 import org.eclipse.microprofile.context.ManagedExecutor;

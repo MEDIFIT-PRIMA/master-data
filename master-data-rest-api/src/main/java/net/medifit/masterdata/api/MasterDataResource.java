@@ -5,10 +5,12 @@ import io.openepcis.model.rest.ProblemResponseBody;
 import io.openepcis.s3.AmazonS3Service;
 import io.openepcis.s3.UploadMetadata;
 import io.quarkus.runtime.Startup;
+import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.medifit.masterdata.MasterDataSchemaService;
 import net.medifit.masterdata.schema.JsonSchemaLoader;
+import net.medifit.masterdata.schema.ObjectVersionSchema;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.ParameterIn;
@@ -31,6 +34,7 @@ import org.everit.json.schema.ValidationException;
 import org.jboss.resteasy.reactive.RestPath;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.json.JSONObject;
+import software.amazon.awssdk.services.s3.model.ObjectVersion;
 import software.amazon.awssdk.utils.IoUtils;
 
 @Tag(name = "MasterData", description = "Endpoints for managing MasterData.")
@@ -285,6 +289,32 @@ public class MasterDataResource {
           @RestPath
           String id) {
     final String key = id.concat(".json");
+
     return Uni.createFrom().item(amazonS3Service.get(key));
   }
+// In-progress end point to list object versions
+    @Operation(
+            description = "Get single json data document and version with  by id provided",
+            summary = "get entry and versionId from masterdata database by id")
+    @GET
+    @Path("{group}/{type}/{id}/versions")
+    @Consumes({MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
+    public List<ObjectVersionSchema> getDataByVersionId(
+            @Parameter(description = "schema group", required = true, in = ParameterIn.PATH)
+            @NotNull
+            @RestPath
+            String group,
+            @Parameter(description = "type name", required = true, in = ParameterIn.PATH)
+            @NotNull
+            @RestPath
+            String type,
+            @Parameter(description = "type object id", required = true, in = ParameterIn.PATH)
+            @NotNull
+            @RestPath
+            String id) {
+        final String key = id.concat(".json");
+        //System.out.println(amazonS3Service.getAllVersions1(key));
+        return amazonS3Service.getAllVersions(key).stream().map(ObjectVersionSchema::fromObjectVersion).toList();
+    }
 }

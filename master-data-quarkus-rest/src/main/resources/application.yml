@@ -1,5 +1,5 @@
 s3:
-  bucket: openepcis
+  bucket: master-data-service
   json-schema-key-prefix: "json-schema/"
   xsd-schema-key-prefix: "xsd-schema/"
   document-key-prefix-date-format: "'capture-document/'yyyy/MM/dd/"

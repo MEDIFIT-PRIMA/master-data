@@ -23,7 +23,6 @@
     </properties>
 
     <modules>
-        <module>modules/openepcis-s3</module>
         <module>master-data-core</module>
         <module>master-data-service</module>
         <module>master-data-rest-api</module>
@@ -55,7 +54,8 @@
             <dependency>
                 <groupId>io.openepcis</groupId>
                 <artifactId>openepcis-s3</artifactId>
-                <version>${openepcis.github.version}</version>
+                <version>${project.version}</version>
+                <!--<scope>provided</scope>-->
             </dependency>
             <dependency>
                 <groupId>io.openepcis</groupId>

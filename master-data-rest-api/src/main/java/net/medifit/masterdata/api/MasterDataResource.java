@@ -222,14 +222,15 @@ public class MasterDataResource {
                         } catch (IOException ioe) {
                           throw new RuntimeException(ioe.getMessage(), ioe);
                         }
-                        return u.getVersionId();
+                        return u;
                       });
             })
         .onItem()
         .transform(
-            item -> {
+            uploadResult -> {
+                final String versionId = uploadResult.getVersionId();
               return RestResponse.created(
-                  URI.create(String.format("masterdata/%s/%s/%s", group, type, uuid.concat(item!=null && !item.isBlank()?"?versionId"+item:""))));
+                  URI.create(String.format("masterdata/%s/%s/%s", group, type, uuid.concat(versionId!=null && !versionId.isBlank()?"?versionId"+versionId:""))));
             });
   }
 

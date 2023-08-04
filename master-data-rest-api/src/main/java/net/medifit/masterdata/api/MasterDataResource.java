@@ -288,7 +288,7 @@ public class MasterDataResource {
           @NotNull
           @RestPath
           String id,
-      @Parameter(description = "version id", required = true, in = ParameterIn.QUERY)
+      @Parameter(description = "version id", required = false, in = ParameterIn.QUERY)
       @RestQuery
       String versionId ) {
 

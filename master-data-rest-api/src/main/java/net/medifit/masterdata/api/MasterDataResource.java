@@ -5,7 +5,6 @@ import io.openepcis.model.rest.ProblemResponseBody;
 import io.openepcis.s3.AmazonS3Service;
 import io.openepcis.s3.UploadMetadata;
 import io.quarkus.runtime.Startup;
-import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,9 +31,9 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.everit.json.schema.ValidationException;
 import org.jboss.resteasy.reactive.RestPath;
+import org.jboss.resteasy.reactive.RestQuery;
 import org.jboss.resteasy.reactive.RestResponse;
 import org.json.JSONObject;
-import software.amazon.awssdk.services.s3.model.ObjectVersion;
 import software.amazon.awssdk.utils.IoUtils;
 
 @Tag(name = "MasterData", description = "Endpoints for managing MasterData.")
@@ -223,14 +222,14 @@ public class MasterDataResource {
                         } catch (IOException ioe) {
                           throw new RuntimeException(ioe.getMessage(), ioe);
                         }
-                        return u.getKey();
+                        return u.getVersionId();
                       });
             })
         .onItem()
         .transform(
             item -> {
               return RestResponse.created(
-                  URI.create(String.format("masterdata/%s/%s/%s", group, type, uuid)));
+                  URI.create(String.format("masterdata/%s/%s/%s", group, type, uuid.concat(item!=null && !item.isBlank()?"?versionId"+item:""))));
             });
   }
 
@@ -287,9 +286,12 @@ public class MasterDataResource {
       @Parameter(description = "type object id", required = true, in = ParameterIn.PATH)
           @NotNull
           @RestPath
-          String id) {
-    final String key = id.concat(".json");
+          String id,
+      @Parameter(description = "version id", required = true, in = ParameterIn.QUERY)
+      @RestQuery
+      String versionId ) {
 
+    final String key = id.concat(".json").concat(versionId != null && !versionId.isBlank()?"?versionId"+versionId:"");
     return Uni.createFrom().item(amazonS3Service.get(key));
   }
 // In-progress end point to list object versions
@@ -300,7 +302,7 @@ public class MasterDataResource {
     @Path("{group}/{type}/{id}/versions")
     @Consumes({MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_JSON})
-    public List<ObjectVersionSchema> getDataByVersionId(
+    public List<ObjectVersionSchema> getVersionsById(
             @Parameter(description = "schema group", required = true, in = ParameterIn.PATH)
             @NotNull
             @RestPath

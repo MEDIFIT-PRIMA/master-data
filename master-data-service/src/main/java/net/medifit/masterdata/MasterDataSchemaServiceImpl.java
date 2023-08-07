@@ -32,12 +32,7 @@ import org.opensearch.client.opensearch.core.SearchRequest;
 public class MasterDataSchemaServiceImpl implements MasterDataSchemaService {
 
   private final Repository repository;
-
-  private final ObjectMapper objectMapper;
-
   private final AmazonS3Service amazonS3Service;
-
-  private final ManagedExecutor managedExecutor;
 
   @ConfigProperty(
       name = "app.opensearch.index.master-data-schema.name",

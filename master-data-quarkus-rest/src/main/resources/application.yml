@@ -5,29 +5,15 @@ s3:
   document-key-prefix-date-format: "'capture-document/'yyyy/MM/dd/"
 
 quarkus:
-  security:
-    auth:
-      enabled-in-dev-mode: false
-
-  arc:
-    unremovable-types: io.quarkus.security.spi.runtime.SecurityCheckStorage
-
-  log:
-    level: INFO
-    category:
-      "org.elasticsearch.client.RestClient":
-        level: ERROR
   swagger-ui:
     always-include: true
-    oauth2-redirect-url: "/q/swagger-ui/oauth2-redirect.html"
-    theme: original
   opensearch:
     hosts: localhost:9200
   s3:
-    endpoint-override: "${S3_ENDPOINT_OVERRIDE:http://localhost:9100}"
+    endpoint-override: "${S3_ENDPOINT_OVERRIDE:http://127.0.0.1:9100}"
     aws:
       region: "us-east-1"
-      path-style-access-enabled: true
+      path-style-access: true
       credentials:
         type: static
         static-provider:
@@ -35,41 +21,3 @@ quarkus:
           secret-access-key: "openepcis"
     sync-client:
       type: apache
-#  oidc:
-#    auth-server-url: "http://localhost:9080/auth/realms/openepcis"
-#    client-id: backend-service
-#    credentials:
-#      secret: mjHkAvPjdtRABO45GU7YMKeUDuxg2SW5
-#    tls:
-#      verification: none
-#    authentication:
-#      user-info-required: true
-#    roles:
-#      role-claim-path:
-#        - "realm_access/roles"
-#  smallrye-openapi:
-#    security-scheme: oidc
-#    security-scheme-name: oidc
-#    oidc-open-id-connect-url: "http://localhost:9080/auth/realms/openepcis/.well-known/openid-configuration"
-  rest-client:
-    keycloak-openepcis-apikey:
-      uri: "${KEYCLOAK_OPENEPCIS_APIKEY_URL:http://localhost:9080/auth/realms/openepcis/openepcis-api-key-provider}"
-      scope: javax.inject.Singleton
-
-# joda-time has no jandex index - let's create it
-  index-dependency:
-    joda-time:
-      group-id: joda-time
-      artifact-id: joda-time
-#    jakarta-xml-bind:
-#      group-id: jakarta.xml.bind
-#      artifact-id: jakarta.xml.bind-api
-
-  class-loading:
-    parent-first-artifacts: jakarta.xml.bind:jakarta.xml.bind-api,org.eclipse.persistence:org.eclipse.persistence.moxy
-
-keycloak:
-  server-url: "${KEYCLOAK_SERVER_URL:http://localhost:9080/auth}"
-  realm: "openepcis"
-  client-id: "openepcis-realm-management"
-  client-secret: "nPQX2jGXzebcyaRiFhTdg5lLKYxXK0fK"

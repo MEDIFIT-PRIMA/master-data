@@ -1,0 +1,259 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://medifit-prima.net/schema/product-class.json",
+    "type": "object",
+    "title": "The product-class schema",
+    "description": "The product-class schema describes the default medifit product-class masterdata.",
+    "default": {},
+    "examples": [
+        {
+            "id": "448629b0-ba0e-11eb-8529-0242ac130003",
+            "name": [
+                {
+                    "en": "the product name"
+                }
+            ],
+            "description": [
+                {
+                    "en": "the product description"
+                }
+            ],            "gtin": "0000000000",
+            "brand_name": [
+                {
+                    "en": "the brand name"
+                }
+            ],
+            "food_business_operator": "the food business operator",
+            "ingredients": [
+                {
+                    "en": "the ingredients"
+                }
+            ],
+            "allergens": [
+                {
+                    "en": "the allergens"
+                }
+            ],
+            "packaging_information": [
+                {
+                    "en": "the packaging_information"
+                }
+            ],
+            "additional_instructions": [
+                {
+                    "en": "the additional_instructions"
+                }
+            ],
+            "production_process": [
+                {
+                    "en": "the production_process"
+                }
+            ]
+        }
+    ],
+    "required": [
+        "id",
+        "name"
+    ],
+    "properties": {
+        "id": {
+            "$id": "#/properties/id",
+            "type": "string",
+            "title": "unique id",
+            "description": "unique dataset identifier",
+            "default": "",
+            "examples": [
+                "448629b0-ba0e-11eb-8529-0242ac130003"
+            ]
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "type": "array",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the product name"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "array",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the product description"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "gtin": {
+            "$id": "#/properties/gtin",
+            "type": "string",
+            "title": "The gtin schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "0000000000"
+            ]
+        },
+        "brand_name": {
+            "$id": "#/properties/brand_name",
+            "type": "array",
+            "title": "The brand_name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the brand name"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "food_business_operator": {
+            "$id": "#/properties/food_business_operator",
+            "type": "string",
+            "title": "The food_business_operator schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "the food business operator"
+            ]
+        },
+        "ingredients": {
+            "$id": "#/properties/ingredients",
+            "type": "array",
+            "title": "The ingredients schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the ingredients"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "allergens": {
+            "$id": "#/properties/allergens",
+            "type": "array",
+            "title": "The allergens schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the allergens"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "packaging_information": {
+            "$id": "#/properties/packaging_information",
+            "type": "array",
+            "title": "The packaging_information schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the packaging_information"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "additional_instructions": {
+            "$id": "#/properties/additional_instructions",
+            "type": "array",
+            "title": "The additional_instructions schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the additional_instructions"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        },
+        "production_process": {
+            "$id": "#/properties/production_process",
+            "type": "array",
+            "title": "The production_process schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "en": "the production_process"
+                    }
+                ]
+            ],
+            "patternProperties": {
+                "^.*$": {
+                  "anyOf": [
+                    {"type": "string"}
+                  ]
+                }
+            }
+        }
+    },
+    "additionalProperties": false
+}

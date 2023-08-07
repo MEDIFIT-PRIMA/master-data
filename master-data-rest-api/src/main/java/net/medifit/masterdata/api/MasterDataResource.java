@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
@@ -300,8 +301,9 @@ public class MasterDataResource {
       @RestQuery
       String versionId ) {
 
-    final String key = id.concat(".json").concat(versionId != null && !versionId.isBlank()?"?versionId"+versionId:"");
-    return Uni.createFrom().item(amazonS3Service.get(key));
+    final String key = id.concat(".json");
+    final Optional<String> optionalVersionId = Optional.ofNullable(versionId);
+    return Uni.createFrom().item(amazonS3Service.get(key, optionalVersionId));
   }
 // In-progress end point to list object versions
     @Operation(

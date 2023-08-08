@@ -7,6 +7,8 @@ import org.opensearch.client.opensearch.core.DeleteResponse;
 import org.opensearch.client.opensearch.core.IndexResponse;
 import org.opensearch.client.opensearch.core.SearchRequest;
 
+import java.io.IOException;
+
 public interface Repository {
   <T> Multi<T> search(String index, Class<T> cls, Query query);
 
@@ -15,4 +17,8 @@ public interface Repository {
   <T> Uni<IndexResponse> index(String index, String id, T value);
 
   Uni<DeleteResponse> delete(String index, String id);
+
+    void refresh(String index) throws IOException;
+
+  void refresh() throws IOException;
 }

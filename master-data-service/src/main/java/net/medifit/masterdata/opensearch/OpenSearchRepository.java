@@ -2,6 +2,8 @@ package net.medifit.masterdata.opensearch;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
+
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -9,8 +11,11 @@ import lombok.RequiredArgsConstructor;
 import net.medifit.masterdata.Repository;
 import org.eclipse.microprofile.context.ManagedExecutor;
 import org.opensearch.client.opensearch.OpenSearchAsyncClient;
+import org.opensearch.client.opensearch.OpenSearchClient;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch.core.*;
+import org.opensearch.client.opensearch.indices.FlushRequest;
+import org.opensearch.client.opensearch.indices.RefreshRequest;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -18,6 +23,7 @@ public class OpenSearchRepository implements Repository {
 
   private final OpenSearchAsyncClient asyncClient;
 
+  private final OpenSearchClient client;
   private final ManagedExecutor executor;
 
   @Override
@@ -98,4 +104,14 @@ public class OpenSearchRepository implements Repository {
       return Uni.createFrom().failure(e);
     }
   }
+
+  @Override
+  public void refresh(String index) throws IOException {
+    client.indices().refresh(new RefreshRequest.Builder().index(index).build());
+  }
+
+    @Override
+    public void refresh() throws IOException {
+        client.indices().refresh();
+    }
 }

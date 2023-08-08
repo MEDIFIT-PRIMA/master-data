@@ -23,7 +23,6 @@
     </properties>
 
     <modules>
-        <module>modules/openepcis-s3</module>
         <module>master-data-core</module>
         <module>master-data-service</module>
         <module>master-data-rest-api</module>

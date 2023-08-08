@@ -11,13 +11,17 @@ import net.medifit.masterdata.Repository;
 import net.medifit.masterdata.api.MasterDataResource;
 import net.medifit.masterdata.api.MasterDataSchemaResource;
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.IOException;
 import java.net.URL;
 
 @QuarkusTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BasicIntegrationTest {
 
     @TestHTTPEndpoint(MasterDataSchemaResource.class)
@@ -33,6 +37,7 @@ public class BasicIntegrationTest {
 
     @Test
     @Order(1)
+
     public void createSchemaTest() {
         final Response response =
                 RestAssured.given()
@@ -44,6 +49,7 @@ public class BasicIntegrationTest {
     }
     @Test
     @Order(2)
+
     public void countSchemaTest() {
         final Response response =
                 RestAssured.given()
@@ -58,6 +64,7 @@ public class BasicIntegrationTest {
 
     @Test
     @Order(3)
+
     public void deleteSchemaTest() throws InterruptedException, IOException {
         Response response =
                 RestAssured.given()

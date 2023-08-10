@@ -15,6 +15,8 @@ public interface MasterDataSchemaService {
 
   Uni<MasterDataSchema> storeJsonSchema(
       String group, String type, InputStream schemaStream, String defaultPrefix);
+  Uni<MasterDataSchema> storeJsonSchema(
+          String group, String type,String uuid, InputStream schemaStream, String defaultPrefix);
 
   Uni<MasterDataSchema> storeJsonSchema(String group, String type, URL url, String defaultPrefix);
 

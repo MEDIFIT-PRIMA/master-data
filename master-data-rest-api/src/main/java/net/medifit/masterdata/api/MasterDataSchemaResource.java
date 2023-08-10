@@ -108,7 +108,8 @@ public class MasterDataSchemaResource {
           @RestQuery
           String defaultPrefix,
       @NotNull InputStream inputStream) {
-    return masterDataSchemaService
+
+      return masterDataSchemaService
         .storeJsonSchema(group, type, inputStream, defaultPrefix)
         .onItem()
         .transform(

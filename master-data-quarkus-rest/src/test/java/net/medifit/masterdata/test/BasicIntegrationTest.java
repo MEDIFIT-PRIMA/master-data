@@ -10,6 +10,7 @@ import jakarta.inject.Inject;
 import net.medifit.masterdata.Repository;
 import net.medifit.masterdata.api.MasterDataResource;
 import net.medifit.masterdata.api.MasterDataSchemaResource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.MethodOrderer;
@@ -39,6 +40,7 @@ public class BasicIntegrationTest {
     @Order(1)
 
     public void createSchemaTest() {
+        System.out.println("--------" + schemaUrl.toString().concat("/test/TestNewProductClass"));
         final Response response =
                 RestAssured.given()
                         .contentType(ContentType.JSON)
@@ -47,6 +49,7 @@ public class BasicIntegrationTest {
                         .post(schemaUrl.toString().concat("/test/TestNewProductClass"));
         assertEquals(201, response.statusCode());
     }
+
     @Test
     @Order(2)
 
@@ -79,6 +82,55 @@ public class BasicIntegrationTest {
         assertEquals(200, response.statusCode());
         assertEquals(
                 0, response.jsonPath().getList("type").stream().filter("TestNewProductClass"::equals).count());
+
+    }
+
+    @Test
+    public void postDataWithGroupTypeTest() {
+        final Response response =
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(getClass().getResourceAsStream("/product-class-example.json"))
+                        .when()
+                        .post(dataUrl.toString().concat("/test/TestNewProductClass"));
+        assertEquals(201, response.statusCode());
+    }
+
+    @Test
+    public void postDataWithGroupTypeIdTest() {
+        final Response response =
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(getClass().getResourceAsStream("/product_data_load.json"))
+                        .when()
+                        .post(dataUrl.toString().concat("/openbis/sample/product_data_load"));
+        assertEquals(201, response.statusCode());
+    }
+
+    @Test
+    public void getDataTest() {
+        final Response response =
+                RestAssured.given()
+                        .when()
+
+                        .get(dataUrl.toString().concat("/openbis/sample/").concat("product_data_load"));
+        assertEquals(200, response.statusCode());
+
+        assertEquals(
+                true, response.jsonPath().get("permid").equals("3342209231820153141223233-116"));
+//        System.out.println(response.body().asString());
+    }
+
+    @Test
+    public void getDataByVersionTest() {
+        final Response response =
+                RestAssured.given()
+                        .when()
+
+                        .get(dataUrl.toString().concat("/openbis/sample/").concat("111111232341202209231820153141223233-116").concat("?versionId=1e2c1701-8886-433d-8dec-79b99b336a26"));
+        assertEquals(200, response.statusCode());
+        assertEquals(
+                true, response.jsonPath().get("permid").equals("111111232341202209231820153141223233-116"));
 
     }
 

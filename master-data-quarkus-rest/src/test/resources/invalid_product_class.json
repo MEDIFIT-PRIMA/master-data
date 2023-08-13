@@ -1,0 +1,28 @@
+{
+  "name": [{
+    "en": "the product name"
+  }],
+  "description": [{
+    "en": "the product description"
+  }] ,
+  "gtin": "0000000000",
+  "brand_name": [{
+    "en": "the brand name"
+  }],
+  "food_business_operator": "the food business operator",
+  "ingredients": [{
+    "en": "the ingredients"
+  }],
+  "allergens": [{
+    "en": "the allergens"
+  }],
+  "packaging_information": [{
+    "en": "the packaging_information"
+  }],
+  "additional_instructions": [{
+    "en": "the additional_instructions"
+  }],
+  "production_process": [{
+    "en": "the production_process"
+  }]
+}

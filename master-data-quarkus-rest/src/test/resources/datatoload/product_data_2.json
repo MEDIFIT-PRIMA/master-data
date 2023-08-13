@@ -1,0 +1,26 @@
+{
+  "code" : "SAMPLE12234312test",
+  "permid" : "33422092318201531412232331223232323-116",
+  "identifier" : "/MATERIALS/SAMPLES/SAMPLE74",
+  "sampledetails" : {
+    "matrix_adv_code" : "001-063203",
+    "$name" : "P01_SH_M1_02C_00_MRI01",
+    "partner_analyses" : "MRI",
+    "production_date" : "2022-03-08",
+    "sample_barcode" : "50000",
+    "matrix_adv_text" : "Hackfleisch Schwein auch tiefgefroren",
+    "production_batch" : "1",
+    "packaging_atmosphere" : "70% O2 + 30% CO2",
+    "matrix_note" : "minced pork meat",
+    "packaging_content_size" : "250 g",
+    "storage_temperature_sample" : "2.0",
+    "storage_time_sample" : "test1",
+    "producer" : "MRI"
+  },
+  "samplingtype" : "SAMPLE",
+  "children" : [ "http://localhost:8080/masterdata/openbis/experimentalsubsamplechildren/20220928152939027-1258.json", "http://localhost:8080/masterdata/openbis/experimentalsubsamplechildren/20230116071122670-5124.json", "http://localhost:8080/masterdata/openbis/subsample/20220928124810733-1124.json", "http://localhost:8080/masterdata/openbis/subsample/20230116081453094-5145.json", "http://localhost:8080/masterdata/openbis/subsample/20230116082245292-5146.json" ],
+  "space" : "MATERIALS",
+  "registration_date" : "2022-09-23 23:50:15.314252",
+  "modifier" : "siegfried.muench@mri.bund.de",
+  "modification_date" : "2023-01-24 12:41:51.976824"
+}

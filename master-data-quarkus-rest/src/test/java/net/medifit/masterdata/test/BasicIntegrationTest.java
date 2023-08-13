@@ -60,7 +60,7 @@ public class BasicIntegrationTest {
                         .get(schemaUrl.toString());
         assertEquals(200, response.statusCode());
         assertEquals(
-                1, response.jsonPath().getList("type").stream().filter("TestNewProductClass"::equals).count());
+                1, response.jsonPath().getList("type").stream().filter("sample"::equals).count());
 //        System.out.println(response.body().asString());
     }
 
@@ -72,7 +72,7 @@ public class BasicIntegrationTest {
         Response response =
                 RestAssured.given()
                         .when()
-                        .delete(schemaUrl.toString().concat("/test/TestNewProductClass"));
+                        .delete(schemaUrl.toString().concat("/openbis/sample"));
         assertEquals(200, response.statusCode());
         repository.refresh();
         response =
@@ -134,4 +134,18 @@ public class BasicIntegrationTest {
 
     }
 
+    @Test
+    public void postInvalidDataTest() {
+        final Response response =
+                RestAssured.given()
+                        .contentType(ContentType.JSON)
+                        .body(getClass().getResourceAsStream("/invalid_product_class.json"))
+                        .when()
+                        .post(dataUrl.toString().concat("/test/TestNewProductClass/invalid_product_class"));
+        assertEquals(500, response.statusCode());
+    }
+
+
 }
+
+

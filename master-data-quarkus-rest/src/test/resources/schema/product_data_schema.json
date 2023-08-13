@@ -1,0 +1,65 @@
+{
+  "$id": "https://raw.githubusercontent.com/ShaikDayan/Shaik_rep/master/openbis-sample-schema.json",
+  "$schema": "https://json-schema.org/draft/2019-09/schema",
+  "definitions": {
+    "Sample": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Sample"
+          ]
+        },
+        "code": {
+          "type": "string"
+        },
+        "permid": {
+          "type": "string"
+        },
+        "identifier": {
+          "type": "string"
+        },
+        "sampledetails": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "samplingtype": {
+          "type": "string"
+        },
+        "space": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "registrator": {
+          "type": "string"
+        },
+        "registration_date": {
+          "type": "string"
+        },
+        "modifier": {
+          "type": "string"
+        },
+        "modification_date": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "permid"
+      ]
+    }
+  }
+}

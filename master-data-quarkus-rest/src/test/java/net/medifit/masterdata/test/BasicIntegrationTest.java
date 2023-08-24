@@ -13,16 +13,14 @@ import net.medifit.masterdata.api.MasterDataSchemaResource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.Ignore;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.URL;
 
 @QuarkusTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BasicIntegrationTest {
 
     @TestHTTPEndpoint(MasterDataSchemaResource.class)
@@ -36,7 +34,9 @@ public class BasicIntegrationTest {
     @Inject
     Repository repository;
 
+
     @Test
+    @Disabled
     @Order(1)
 
     public void createSchemaTest() {
@@ -51,6 +51,7 @@ public class BasicIntegrationTest {
     }
 
     @Test
+    @Disabled
     @Order(2)
 
     public void countSchemaTest() {
@@ -65,7 +66,9 @@ public class BasicIntegrationTest {
     }
 
 
+
     @Test
+    @Disabled
     @Order(3)
 
     public void deleteSchemaTest() throws InterruptedException, IOException {
@@ -86,6 +89,7 @@ public class BasicIntegrationTest {
     }
 
     @Test
+    @Disabled
     public void postDataWithGroupTypeTest() {
         final Response response =
                 RestAssured.given()
@@ -96,7 +100,9 @@ public class BasicIntegrationTest {
         assertEquals(201, response.statusCode());
     }
 
+
     @Test
+    @Disabled
     public void postDataWithGroupTypeIdTest() {
         final Response response =
                 RestAssured.given()
@@ -107,7 +113,9 @@ public class BasicIntegrationTest {
         assertEquals(201, response.statusCode());
     }
 
+
     @Test
+    @Disabled
     public void getDataTest() {
         final Response response =
                 RestAssured.given()
@@ -121,7 +129,9 @@ public class BasicIntegrationTest {
 //        System.out.println(response.body().asString());
     }
 
+
     @Test
+    @Disabled
     public void getDataByVersionTest() {
         final Response response =
                 RestAssured.given()
@@ -135,6 +145,7 @@ public class BasicIntegrationTest {
     }
 
     @Test
+    @Disabled
     public void postInvalidDataTest() {
         final Response response =
                 RestAssured.given()

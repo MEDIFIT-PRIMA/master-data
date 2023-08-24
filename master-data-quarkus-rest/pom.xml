@@ -82,6 +82,14 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
 
+        <!-- data generation for tests -->
+        <dependency>
+            <groupId>net.medifit</groupId>
+            <artifactId>data-sample-to-event</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
         <!-- REST assured as dependencies for testing -->
         <dependency>
             <groupId>io.quarkus</groupId>

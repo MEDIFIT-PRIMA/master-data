@@ -5,6 +5,9 @@ s3:
   document-key-prefix-date-format: "'capture-document/'yyyy/MM/dd/"
 
 quarkus:
+  security:
+    auth:
+      enabled-in-dev-mode: true
   swagger-ui:
     always-include: true
   opensearch:
@@ -21,3 +24,36 @@ quarkus:
           secret-access-key: "openepcis"
     sync-client:
       type: apache
+
+  oidc:
+    auth-server-url: "${OPENEPCIS_OIDC_AUTH_SERVER_URL:http://localhost:9080/realms/openepcis}"
+    client-id: backend-service
+    credentials:
+      secret: mjHkAvPjdtRABO45GU7YMKeUDuxg2SW5
+    tls:
+      verification: none
+    authentication:
+      user-info-required: true
+
+    roles:
+      role-claim-path:
+        - "realm_access/roles"
+  smallrye-openapi:
+    security-scheme: oidc
+    security-scheme-name: oidc
+    oidc-open-id-connect-url: "${OPENEPCIS_OIDC_URL:http://localhost:9080/realms/openepcis/.well-known/openid-configuration}"
+
+  # Keycloak Admin client
+  keycloak:
+    admin-client:
+      enabled: true
+      server-url: "${KEYCLOAK_SERVER_URL:http://localhost:9080/}"
+      realm: "openepcis"
+      client-id: "openepcis-realm-management"
+      client-secret: "nPQX2jGXzebcyaRiFhTdg5lLKYxXK0fK"
+      grant-type: CLIENT_CREDENTIALS
+
+  rest-client:
+    keycloak-openepcis-apikey:
+      url: "${KEYCLOAK_OPENEPCIS_APIKEY_URL:http://localhost:9080/realms/openepcis/openepcis-api-key-provider}"
+      scope: javax.inject.Singleton
